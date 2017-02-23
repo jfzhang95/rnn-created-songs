@@ -1,7 +1,7 @@
 # rnn-created-songs
 Vanilla RNN model building Chen Yixun style lyric
 
-## run the code and then you can get the output like this:
+## run the code and then you can get the sample like this:
 
     爱在迷茫中    
     你叫我最多渴望    
