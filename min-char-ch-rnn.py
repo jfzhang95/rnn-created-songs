@@ -2,14 +2,14 @@
 
 
 """
-Minimal character-level Vanilla RNN model. Written by Andrej Karpathy (@karpathy)
+This code using Minimal character-level Vanilla RNN model, which written by Andrej Karpathy (@karpathy)
 BSD License
 """
 import numpy as np
 import jieba
 
 # data I/O
-data = open('F:\\data(processed).txt', 'r').read() # should be simple plain text file
+data = open('input.txt', 'r').read() # should be simple plain text file
 data = data.decode('utf-8')
 data = list(jieba.cut(data, cut_all=False))
 chars = list(set(data))
