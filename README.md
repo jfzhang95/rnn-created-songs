@@ -4,8 +4,8 @@ Vanilla RNN model building Chen Yixun style lyric
 ## run the code and then you can get the output like this:
 
     爱在迷茫中    
-    你叫我最多渴望    
-    渺小的路竟也会相爱最后    
+    你叫我最多渴望    
+    渺小的路竟也会相爱最后    
     在有个一秒多少    
     去分开了 心跳有传说    
     抛弃了 是不是到已经几星    
