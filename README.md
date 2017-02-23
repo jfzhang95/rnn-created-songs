@@ -1,5 +1,5 @@
 # rnn-created-songs
-Vanilla RNN model building Chen Yixun style lyric
+Using Vanilla RNN Model building Chen Yixun style lyric
 
 ## run the code and then you can get the sample like this:
 
