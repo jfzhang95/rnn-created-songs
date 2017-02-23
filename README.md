@@ -3,7 +3,7 @@ Vanilla RNN model building Chen Yixun style lyric
 
 ## run the code and then you can get the output like this:
 
-    爱在迷茫中    
+    爱在迷茫中    
     你叫我最多渴望    
     渺小的路竟也会相爱最后    
     在有个一秒多少    
@@ -11,7 +11,8 @@ Vanilla RNN model building Chen Yixun style lyric
     抛弃了 是不是到已经几星    
     爱过的人    
     我杂物的梦    
-    偏偏我大总是 用变有叫我最爱的     
+    偏偏我大总是 
+    用变有叫我最爱的     
     但你到处叶儿天使仍能赤裸    
     星光跟我话    
     全部天色像人来人往    
@@ -27,7 +28,8 @@ Vanilla RNN model building Chen Yixun style lyric
     我不喜欢还要 娘子    
     你是我牵着手在原始森林的猿人    
     娘子    
-    你那看穿日子 诚恳那泛黄的无法每句也是假    
+    你那看穿日子 
+    诚恳那泛黄的无法每句也是假    
     在永远到痛苦甜蜜的太晚满足   
     早知把彷徨的行囊
     最后也与你放得被窝 
