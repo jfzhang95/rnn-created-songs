@@ -1,5 +1,5 @@
 # rnn-created-songs
-Using Vanilla RNN Model building Chen Yixun style lyric
+I use 130 songs of Chen Yixun as training data and use Vanilla RNN Model to build Chen Yixun style lyric
 
 ## run the code and then you can get the sample like this:
 
