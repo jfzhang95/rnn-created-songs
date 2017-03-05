@@ -3,7 +3,6 @@
 
 """
 This code using Minimal character-level Vanilla RNN model, which written by Andrej Karpathy (@karpathy)
-BSD License
 """
 import numpy as np
 import jieba
