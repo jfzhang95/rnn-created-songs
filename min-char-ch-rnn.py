@@ -8,10 +8,10 @@ import numpy as np
 import jieba
 
 # data I/O
-data = open('input.txt', 'r').read() # should be simple plain text file
+data = open('input.txt', 'r').read()  # should be simple plain text file
 data = data.decode('utf-8')
 data = list(jieba.cut(data, cut_all=False))
-chars = list(set(data))
+chars = list(set(data)) # 所有不重复的词的列表
 data_size, vocab_size = len(data), len(chars)
 
 print 'data has %d characters, %d unique.' % (data_size, vocab_size)
@@ -42,11 +42,11 @@ def lossFun(inputs, targets, hprev):
   # forward pass
   for t in xrange(len(inputs)):
     xs[t] = np.zeros((vocab_size, 1)) # encode in 1-of-k representation
-    xs[t][inputs[t]] = 1
+    xs[t][inputs[t]] = 1  # inputs中第t个词对应的编码为1
     hs[t] = np.tanh(np.dot(Wxh, xs[t]) + np.dot(Whh, hs[t-1]) + bh) # hidden state
     ys[t] = np.dot(Why, hs[t]) + by # unnormalized log probabilities for next chars
     ps[t] = np.exp(ys[t]) / np.sum(np.exp(ys[t])) # probabilities for next chars
-    # loss += -log(value) 预期输出是1，因此这里的value值就是此次的代价函数，
+    # loss += -log(value) 预期输出是1，因此这里的value值就是此次的代价函数
     # 使用 -log(*) 使得离正确输出越远，代价函数就越高
     loss += -np.log(ps[t][targets[t],0]) # softmax (cross-entropy loss)
   # backward pass: compute gradients going backwards
@@ -55,7 +55,7 @@ def lossFun(inputs, targets, hprev):
   dhnext = np.zeros_like(hs[0])
   for t in reversed(xrange(len(inputs))):
     dy = np.copy(ps[t])
-    dy[targets[t]] -= 1 # backprop into y.see http://cs231n.github.io/neural-networks-case-study/#grad if confused here
+    dy[targets[t]] -= 1 # backprop into y
     dWhy += np.dot(dy, hs[t].T)
     dby += dy
     dh = np.dot(Why.T, dy) + dhnext # backprop into h
@@ -65,8 +65,8 @@ def lossFun(inputs, targets, hprev):
     dWhh += np.dot(dhraw, hs[t-1].T)
     dhnext = np.dot(Whh.T, dhraw)
   for dparam in [dWxh, dWhh, dWhy, dbh, dby]:
-    np.clip(dparam, -5, 5, out=dparam) # clip to mitigate exploding gradients(剪辑梯度)
-  return loss, dWxh, dWhh, dWhy, dbh, dby, hs[len(inputs)-1]
+    np.clip(dparam, -5, 5, out=dparam) # clip to mitigate exploding gradients(防止梯度爆炸)
+  return loss, dWxh, dWhh, dWhy, dbh, dby, hs[len(inputs)-1] # 最后一时刻的state
 
 def sample(h, seed_ix, n):
   """
@@ -84,11 +84,10 @@ def sample(h, seed_ix, n):
     x = np.zeros((vocab_size, 1)) # 产生下一轮的输入
     x[ix] = 1
     ixes.append(ix)
-  return ixes  # ixes represent 每一轮的输出的char所对应的序号
-
+  return ixes  # ixes represent 每一轮输出的char所对应的index
 n, p = 0, 0
 mWxh, mWhh, mWhy = np.zeros_like(Wxh), np.zeros_like(Whh), np.zeros_like(Why)
-mbh, mby = np.zeros_like(bh), np.zeros_like(by) # memory variables for Adagrad(优化方法)
+mbh, mby = np.zeros_like(bh), np.zeros_like(by) # memory variables for Adagrad
 smooth_loss = -np.log(1.0 / vocab_size) * seq_length # loss at iteration 0
 while True:
   # prepare inputs (we're sweeping from left to right in steps seq_length long)
@@ -96,13 +95,13 @@ while True:
   if p+seq_length+1 >= len(data) or n == 0:
     hprev = np.zeros((hidden_size,1)) # reset RNN memory
     p = 0 # go from start of data
-  inputs = [char_to_ix[ch] for ch in data[p:p+seq_length]]   # 一批输入seq_length个字符
+  inputs = [char_to_ix[ch] for ch in data[p:p+seq_length]]   # inputs的值为一批输入字符对应的index
   targets = [char_to_ix[ch] for ch in data[p+1:p+seq_length+1]] # targets是对应的inputs的期望输出。
 
   # sample from the model now and then
   if n % 100 == 0:  # 每循环100词， sample一次，显示结果
-    sample_ix = sample(hprev, inputs[0], 200)
-    txt = ''.join(ix_to_char[ix] for ix in sample_ix)
+    sample_ix = sample(hprev, inputs[0], 200)  # 一次sample200个字符，得到200个字符对应的index
+    txt = ''.join(ix_to_char[ix] for ix in sample_ix) # 将index转化成对应的字符
     print '----\n %s \n----' % (txt, )
 
   # forward seq_length characters through the net and fetch gradient
@@ -114,9 +113,9 @@ while True:
   for param, dparam, mem in zip([Wxh, Whh, Why, bh, by],
                                 [dWxh, dWhh, dWhy, dbh, dby],
                                 [mWxh, mWhh, mWhy, mbh, mby]):
-    mem += dparam * dparam  # 梯度的累加
+    mem += dparam * dparam  # 梯度的累加，最后可能变得非常大
     # adagrad update 随着迭代次数增加，参数的变更量会越来越小
     param += -learning_rate * dparam / np.sqrt(mem + 1e-8) # adagrad update
 
   p += seq_length # move data pointer
-  n += 1 # iteration counter, 循环次数
+  n += 1 # iteration counter
